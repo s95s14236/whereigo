@@ -12,15 +12,19 @@ import IRegion from "../../models/IRegion.interface";
 import { RootState } from "../../store";
 import { setAttractions, incrementPageNum } from "../../store/attraction/attraction.slice";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import useAttractions from "../../hooks/useAttractions";
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // const [pageNum, setPageNum] = useState<number>(0);
   const [lastElement, setLastElement] = useState<Element | null>(null);
+  const [attractionApiUrl, setAttractionApiUrl] = useState<string | null>(null);
 
   // attraction redux state
   const attractions: IAttraction[] = useSelector((state: RootState) => state.attraction.attractions);
+  // 透過swr優化fetch cache
+  const { data } = useAttractions(attractionApiUrl?attractionApiUrl:"");
   // query attraction api page num
   const pageNum: number = useSelector((state: RootState) => state.attraction.pageNum);
   // region selector redux state
@@ -266,6 +270,20 @@ export default function HomePage() {
     // }]));
   }, [])
 
+  // data是swr回傳的資料, 回傳event
+  useEffect(() => {
+    if (data) {
+      const news: IAttraction[] = data.data.attractions;
+      if (news?.length <= 0) {
+        setLastElement(null);
+        return;
+      }
+      const all = [...attractions, ...news];
+      dispatch(setAttractions(all.filter((attraction, index) => all.findIndex(attr => attr.id === attraction.id) === index)));
+    }
+    setIsLoading(false);
+  }, [data])
+
   useEffect(() => {
     const currentElement = lastElement;
     const currentObserver = observer.current;
@@ -304,34 +322,15 @@ export default function HomePage() {
   }
 
   /**
-   * fetch 景點
-   * @param isClear 是否重新set attraction array
+   * fetch 景點 (改由set fetch attractions api url, 並透過swr cache)
    */
-  function fetchAttractions(isClear: boolean = false): void {
+  function fetchAttractions(): void {
     setIsLoading(true);
-    let url: string;
     if (region.region.trim() !== "") {
-      url = `${process.env.REACT_APP_API_URL}/attraction/region/${region.region}?${region.town.trim() === "" ? "" : "town=" + region.town}${pageNum > 0 ? "&page=" + pageNum : ""}`;
+      setAttractionApiUrl(`${process.env.REACT_APP_API_URL}/attraction/region/${region.region}?${region.town.trim() === "" ? "" : "town=" + region.town}${pageNum > 0 ? "&page=" + pageNum : ""}`);
     } else {
-      url = `${process.env.REACT_APP_API_URL}/attraction${pageNum > 0 ? "?page=" + pageNum : ""}`;
+      setAttractionApiUrl(`${process.env.REACT_APP_API_URL}/attraction${pageNum > 0 ? "?page=" + pageNum : ""}`);
     }
-    console.log(url);
-
-    fetch(url).then(async data => {
-      const news: IAttraction[] = (await data.json()).data.attractions;
-      if (news.length <= 0) {
-        setLastElement(null);
-        return;
-      }
-      if (isClear) {
-        dispatch(setAttractions([...news]));
-      } else {
-        const all = [...attractions, ...news];
-        dispatch(setAttractions(all.filter((attraction, index) => all.findIndex(attr => attr.id === attraction.id) === index)));
-      }
-    }).finally(() => {
-      setIsLoading(false);
-    })
   }
 
   // 更改縣市&區域 並 click搜尋
@@ -340,7 +339,7 @@ export default function HomePage() {
     dispatch(setAttractions([]));
     // setPageNum(0);
     dispatch(incrementPageNum());
-    fetchAttractions(true);
+    fetchAttractions();
   }
 
   function onAttractionCardClick(attractionId: number): void {
