@@ -43,8 +43,8 @@ export default function AttractionCard({ attraction }: Props) {
     return (
         <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Card sx={{ p: 2, width: "80%", boxShadow: 2, borderRadius: 2, m: 1, textAlign: "start" }}>
-                <Box sx={{background: "#FAFAFA", width: "100%", height: "220px"}}>
-                    {attraction.Picture1 && <Image src={attraction.Picture1} alt={attraction.Name} loading="lazy" />}
+                <Box sx={{background: "#FAFAFA", width: "100%", height: "220px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+                    {attraction.Picture1 ? <Image src={attraction.Picture1} alt={attraction.Name} loading="lazy" /> : <p>沒有圖片</p>}
                 </Box>
                 <Title>{attraction.Name}</Title>
                 <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop: '4px' }}>
