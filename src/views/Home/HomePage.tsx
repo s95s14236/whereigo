@@ -276,6 +276,7 @@ export default function HomePage() {
       const news: IAttraction[] = data.data.attractions;
       if (news?.length <= 0) {
         setLastElement(null);
+        setIsLoading(false);
         return;
       }
       const all = [...attractions, ...news];
