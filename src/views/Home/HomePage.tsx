@@ -10,7 +10,7 @@ import SkeletonCard from "../../components/home/SkeletonCard";
 import IAttraction from "../../models/IAttraction.interface";
 import IRegion from "../../models/IRegion.interface";
 import { RootState } from "../../store";
-import { setAttractions, incrementPageNum } from "../../store/attraction/attraction.slice";
+import { setAttractions, incrementPageNum, resetPageNum } from "../../store/attraction/attraction.slice";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 export default function HomePage() {
@@ -338,8 +338,8 @@ export default function HomePage() {
   function handleRegion(): void {
     console.log("search");
     dispatch(setAttractions([]));
-    // setPageNum(0);
-    dispatch(incrementPageNum());
+    dispatch(resetPageNum());
+    // dispatch(incrementPageNum());
     fetchAttractions(true);
   }
 

@@ -24,10 +24,14 @@ export const attractionSlice = createSlice({
         incrementPageNum: (state) => ({
             ...state,
             pageNum: state.pageNum + 1
+        }),
+        resetPageNum: (state) => ({
+            ...state,
+            pageNum: 0
         })
     }
 })
 
-export const { setAttractions, incrementPageNum } = attractionSlice.actions;
+export const { setAttractions, incrementPageNum, resetPageNum } = attractionSlice.actions;
 
 export default attractionSlice.reducer;
