@@ -165,7 +165,7 @@ export default function AttractionDetailPage() {
                         attraction.Travellinginfo &&
                         <div>
                             <Label >交通資訊</Label>
-                            <Text>{attraction.Travellinginfo}</Text>
+                            <Text><div dangerouslySetInnerHTML={{__html: attraction.Travellinginfo}}></div></Text>
                         </div>
                     }
                     {
