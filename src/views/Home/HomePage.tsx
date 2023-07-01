@@ -102,6 +102,12 @@ export default function HomePage() {
     dispatch(resetPageNum());
     // dispatch(incrementPageNum());
     fetchAttractions(true);
+    const anchor = document.querySelector('#back-to-top-anchor');
+    if (anchor) {
+        anchor.scrollIntoView({
+            block: 'center',
+        });
+    }
   }
 
   function onAttractionCardClick(attractionId: number): void {
