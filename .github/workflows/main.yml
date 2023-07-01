@@ -1,0 +1,26 @@
+name: Build and Deploy
+
+on:
+  # 有 push 或是 pull_request 到 main 這個 branch 時就會執行以下內容
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      # 先執行打包後部署到 Firebase 上，打包的指令可依據需求來做更改
+      - name: Build
+        run: |
+          yarn
+          yarn build
+      - name: Firebase Deploy
+        run: |
+          sudo npm install -g firebase-tools
+          firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
