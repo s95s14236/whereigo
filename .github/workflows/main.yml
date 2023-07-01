@@ -3,9 +3,9 @@ name: Build and Deploy
 on:
   # 有 push 或是 pull_request 到 main 這個 branch 時就會執行以下內容
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   build:
