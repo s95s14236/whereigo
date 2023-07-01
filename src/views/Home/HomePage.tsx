@@ -97,7 +97,6 @@ export default function HomePage() {
 
   // 更改縣市&區域 並 click搜尋
   function handleRegion(): void {
-    console.log("search");
     dispatch(setAttractions([]));
     dispatch(resetPageNum());
     // dispatch(incrementPageNum());
