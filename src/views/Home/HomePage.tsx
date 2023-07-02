@@ -24,11 +24,15 @@ export default function HomePage() {
   );
   // region selector redux state
   const region: IRegion = useSelector((state: RootState) => state.region);
+  const [regionSearch, setRegionSearch] = useState<IRegion>({
+    region: "",
+    town: "",
+  });
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
   const { data, isFetching, isFetchingNextPage, fetchNextPage } =
-    useAttractions(region.region, region.town);
+    useAttractions(regionSearch.region || region.region, regionSearch.town || region.town);
 
   const observer = useRef(
     new IntersectionObserver((entries) => {
@@ -60,8 +64,7 @@ export default function HomePage() {
     };
   }, [lastElement]);
 
-  // 更改縣市&區域 並 click搜尋
-  function handleRegion(): void {
+  useEffect(() => {
     queryClient.clear();
     fetchNextPage();
     const anchor = document.querySelector("#back-to-top-anchor");
@@ -70,6 +73,11 @@ export default function HomePage() {
         block: "center",
       });
     }
+  }, [fetchNextPage, queryClient, regionSearch])
+
+  // 更改縣市&區域 並 click搜尋
+  function handleRegion(): void {
+    setRegionSearch({ region: region.region, town: region.town });
   }
 
   function onAttractionCardClick(attractionId: number): void {
@@ -86,7 +94,7 @@ export default function HomePage() {
           attractions.map((attraction, index) => {
             return index === attractions.length - 1 ? (
               <div
-                key={attraction.Id + index}
+                key={attraction.Id}
                 ref={setLastElement}
                 onClick={() => onAttractionCardClick(attraction.id)}
               >
@@ -94,7 +102,7 @@ export default function HomePage() {
               </div>
             ) : (
               <div
-                key={attraction.Id + index}
+                key={attraction.Id}
                 onClick={() => onAttractionCardClick(attraction.id)}
               >
                 <AttractionCard attraction={attraction} />
