@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import IAttraction from "../../models/IAttraction.interface";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Label, Text, Title } from "../../components/common/Text";
 import DetailSlideAppBar from "../../components/Attraction/DetailSlideAppBar";
 import PlaceIcon from "@mui/icons-material/Place";
@@ -57,9 +56,9 @@ export default function AttractionDetailPage() {
         navigate(-1);
     }
 
-    function addToFavorite() {
+    // function addToFavorite() {
 
-    }
+    // }
 
     function onLocationClick() {
         console.log("onLocationClick");
