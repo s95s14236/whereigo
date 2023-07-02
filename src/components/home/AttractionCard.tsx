@@ -3,8 +3,8 @@ import Card from "@mui/material/Card";
 import IAttraction from "../../models/IAttraction.interface";
 import styled from "@emotion/styled";
 import PlaceIcon from "@mui/icons-material/Place";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+// import FavoriteIcon from '@mui/icons-material/Favorite';
+// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { MouseEvent } from "react";
 
 interface Props {
