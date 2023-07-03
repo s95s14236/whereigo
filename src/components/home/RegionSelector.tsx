@@ -5,33 +5,32 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import { useDispatch, useSelector } from "react-redux";
-import { setRegion, setTown } from "../../store/region/region.slice";
+import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Slide from "@mui/material/Slide";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import { AppBar } from "@mui/material";
+import { useState } from "react";
 
 interface Props {
-  handleRegion: () => void;
+  handleRegion: (region: IRegion) => void;
 }
 
 export default function RegionSelector({ handleRegion }: Props) {
   // region selector redux state
-  const region: IRegion = useSelector((state: RootState) => state.region);
-  const dispatch = useDispatch();
+  const regionSearch: IRegion = useSelector((state: RootState) => state.region);
+  const [region, setRegion] = useState<IRegion>({ region: regionSearch.region, town: regionSearch.town });
 
   const trigger = useScrollTrigger({
     target: undefined,
   });
 
   const handleRegionChange = (event: SelectChangeEvent) => {
-    dispatch(setRegion(event.target.value));
-    dispatch(setTown(""));
+    setRegion({ region: event.target.value, town: '' });
   };
 
   const handleTownChange = (event: SelectChangeEvent) => {
-    dispatch(setTown(event.target.value));
+    setRegion((prev) => ({ ...prev, town: event.target.value }));
   };
 
   return (
@@ -91,7 +90,7 @@ export default function RegionSelector({ handleRegion }: Props) {
         <Button
           variant="outlined"
           sx={{ width: "80px", height: "50px" }}
-          onClick={() => handleRegion()}
+          onClick={() => handleRegion(region)}
         >
           搜尋
         </Button>

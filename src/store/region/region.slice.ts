@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import IRegion from "../../models/IRegion.interface";
 
 interface regionState {
     region: string
@@ -22,10 +23,14 @@ export const regionSlice = createSlice({
         },
         setTown: (state, action: PayloadAction<string>) => {
             state.town = action.payload;
+        },
+        setRegionAndTown: (state, action: PayloadAction<IRegion>) => {
+            state.region = action.payload.region;
+            state.town = action.payload.town;
         }
     }
 })
 
-export const {setRegion, setTown} = regionSlice.actions;
+export const {setRegion, setTown, setRegionAndTown} = regionSlice.actions;
 
 export default regionSlice.reducer;

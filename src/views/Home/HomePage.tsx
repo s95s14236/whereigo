@@ -14,6 +14,7 @@ import { setAttractions } from "../../store/attraction/attraction.slice";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useQueryClient } from "@tanstack/react-query";
 import useAttractions from "../../hooks/useAttractions";
+import { setRegionAndTown } from "../../store/region/region.slice";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -24,15 +25,11 @@ export default function HomePage() {
   );
   // region selector redux state
   const region: IRegion = useSelector((state: RootState) => state.region);
-  const [regionSearch, setRegionSearch] = useState<IRegion>({
-    region: "",
-    town: "",
-  });
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
   const { data, isFetching, isFetchingNextPage, fetchNextPage } =
-    useAttractions(regionSearch.region || region.region, regionSearch.town || region.town);
+    useAttractions(region.region, region.town);
 
   const observer = useRef(
     new IntersectionObserver((entries) => {
@@ -64,20 +61,16 @@ export default function HomePage() {
     };
   }, [lastElement]);
 
-  useEffect(() => {
+  // 更改縣市&區域 並 click搜尋
+  function handleRegion(region: IRegion): void {
+    dispatch(setRegionAndTown(region));
     queryClient.clear();
-    fetchNextPage();
     const anchor = document.querySelector("#back-to-top-anchor");
     if (anchor) {
       anchor.scrollIntoView({
         block: "center",
       });
     }
-  }, [fetchNextPage, queryClient, regionSearch])
-
-  // 更改縣市&區域 並 click搜尋
-  function handleRegion(): void {
-    setRegionSearch({ region: region.region, town: region.town });
   }
 
   function onAttractionCardClick(attractionId: number): void {
