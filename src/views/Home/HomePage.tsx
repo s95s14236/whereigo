@@ -19,10 +19,6 @@ import { setRegionAndTown } from "../../store/region/region.slice";
 export default function HomePage() {
   const navigate = useNavigate();
   const [lastElement, setLastElement] = useState<Element | null>(null);
-  // attraction redux state
-  const attractions: IAttraction[] = useSelector(
-    (state: RootState) => state.attraction.attractions
-  );
   // region selector redux state
   const region: IRegion = useSelector((state: RootState) => state.region);
   const dispatch = useDispatch();
@@ -76,6 +72,11 @@ export default function HomePage() {
   function onAttractionCardClick(attractionId: number): void {
     navigate(`/attraction/${attractionId}`);
   }
+
+  // 直接拿useInfiniteQuery回傳的data, 避免多次rerender
+  const attractions = data?.pages.flatMap(
+    (item) => item.attractions
+  ) ?? [];
 
   return (
     <Box>

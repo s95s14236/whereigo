@@ -22,6 +22,7 @@ function useAttractions(region?: string, town?: string) {
     {
       getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
       cacheTime: 300000,
+      staleTime: 300000,
     }
   );
 }
