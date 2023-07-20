@@ -5,13 +5,13 @@ import styled from "@emotion/styled";
 import PlaceIcon from "@mui/icons-material/Place";
 // import FavoriteIcon from '@mui/icons-material/Favorite';
 // import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { MouseEvent } from "react";
+import { MouseEvent, memo } from "react";
 
 interface Props {
     attraction: IAttraction
 }
 
-export default function AttractionCard({ attraction }: Props) {
+function AttractionCard({ attraction }: Props) {
 
     let Image = styled.img({
         width: "100%",
@@ -61,3 +61,5 @@ export default function AttractionCard({ attraction }: Props) {
         </Box>
     )
 }
+
+export default memo(AttractionCard);
